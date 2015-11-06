@@ -1,0 +1,49 @@
+#服务名称
+com.ancare.name: ancare-01
+#服务绑定地址
+com.ancare.host: localhost
+#服务绑定端口号
+com.ancare.port: 10001
+#请求超时时间,30s,seconds
+com.ancare.server.request.timeout: 45
+#读取请求超时设置,15s,seconds
+com.ancare.server.request.read.timeout: 15
+#读取请求最大,5M,bytes
+com.ancare.server.max.recv.buffer.size: 5242880
+#发送响应最大大小,5M,bytes
+com.ancare.server.max.response.buffer.size: 5242880
+#连接最大的空闲时间,5s,seconds
+com.ancare.server.connect.max.idle.time: 5
+#连接最大生命周期
+com.ancare.server.connect.max.lifecycle.time: 60
+#最大连接数
+com.ancare.server.max.connected.client.number: 1024
+#是否保持长连接
+com.ancare.server.connect.keepalive: true
+#本地存储位置
+com.ancare.storage.local.dir: /usr/local/share/nginx/storage/
+#前端代理服务器路径
+com.ancare.nginx.filestorage.proxy.url: http://localhost:10001
+#缓存服务器地址
+com.ancare.redis.cache.servers:
+ - localhost:6603
+
+#mysql服务器地址
+com.ancare.mysql.servers.hosts: "localhost:1012"
+com.ancare.mysql.servers.database: ancare
+com.ancare.mysql.servers.username: root
+com.ancare.mysql.servers.password: root
+
+#用户登录token有效期，默认1天，单位seconds
+com.ancare.server.user.token.expired: 86400
+#短信注册验证码有效期，默认5分钟，单位seconds
+com.ancare.server.user.register.verifycode.expired: 300
+#请求认证信息认证信息key字段
+com.ancare.authorization.key: Authorization
+
+com.changhong.sms.server.url: 1
+com.changhong.sms.server.appkey: 1
+com.changhong.sms.server.secretkey: 1
+
+
+
