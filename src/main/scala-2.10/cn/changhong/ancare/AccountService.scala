@@ -45,7 +45,10 @@ class AccountService extends Controller(Some("/account")){
         DefaultResponseContent(DefaultResponseCode.user_not_exit._1,DefaultResponseCode.user_not_exit._2)
       }
     }catch{
-      case ex:Throwable=>DefaultResponseContent(DefaultResponseCode.db_executor_error._1,DefaultResponseCode.db_executor_error._2)
+      case ex:Throwable=>{
+        ex.printStackTrace()
+        DefaultResponseContent(DefaultResponseCode.db_executor_error._1,DefaultResponseCode.db_executor_error._2)
+      }
     }
   }
   /**
@@ -125,7 +128,10 @@ class AccountService extends Controller(Some("/account")){
         }
       }
     }catch{
-      case ex:Throwable=>DefaultResponseContent(DefaultResponseCode.user_not_exit._1,"密码错误")
+      case ex:Throwable=>{
+        ex.printStackTrace()
+        DefaultResponseContent(DefaultResponseCode.user_not_exit._1,"密码错误")
+      }
     }
   }
 
@@ -150,4 +156,6 @@ class AccountService extends Controller(Some("/account")){
     val kvs:Map[String,String]=fb+("creation"->(System.currentTimeMillis()+""))
     AncareTools.insert(kvs,"tb_feedback")
   }
+
+
 }

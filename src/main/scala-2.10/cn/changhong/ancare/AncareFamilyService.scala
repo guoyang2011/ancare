@@ -28,7 +28,7 @@ class AncareFamilyService extends Controller(Some("/family")){
   //get Familys By User Id
   get("/getfamilysbyuserid/:userId") { request: DynamicPathParamsRequest[String] =>
     val userId = request.getDynamicPathParam("userId", "-1")
-    val selectSql = s"select * from tb_family as a inner join (select family_id from tb_familymember where user_id='$userId') as a on a.id=b.family_id"
+    val selectSql = s"select * from tb_family as a inner join (select family_id from tb_familymember where user_id='$userId') as b on a.id=b.family_id"
     SqlProvider.noTransactionExec[Map[String, AnyRef]](selectSql)
   }
   //get family members by family id

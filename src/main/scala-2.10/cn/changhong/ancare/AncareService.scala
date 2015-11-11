@@ -6,6 +6,7 @@ import com.flashbird.http.framework.request.DynamicPathParamsRequest
 import com.flashbird.http.util.{ FlashBirdConfig, SqlProvider}
 import com.twitter.finagle.httpx.Request
 import com.flashbird.http.util.UserDefinedGetResult._
+import com.twitter.util.Future
 
 /**
  * Created by yangguo on 15/10/28.
