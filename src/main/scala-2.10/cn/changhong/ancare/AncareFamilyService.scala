@@ -11,6 +11,7 @@ import com.flashbird.http.util.UserDefinedGetResult._
  * Created by yangguo on 15/10/28.
  */
 class AncareFamilyService extends Controller(Some("/family")){
+
   /**
    *  create Family
    */
@@ -52,4 +53,6 @@ class AncareFamilyService extends Controller(Some("/family")){
     val map=AncareTools.multiPartFormRequestDecoder(request).filter(kv=>filterKey(kv._1))
     AncareTools.update(map,"tb_family",s"id='${map.getOrElse("id","-1")}'")
   }
+
+  override def defaultIsNeedAuth: Boolean = true
 }

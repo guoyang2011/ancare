@@ -19,14 +19,15 @@ case class RegisterStep3Request(phone:String,verifyCode:String,password:String)
 case class ChangePasswordBean(id:String,oldPwd:String,newPwd:String)
 case class FeedBack(user_id:String,remark:String,tag:String)
 class AccountService extends Controller(Some("/account")){
+  override def defaultIsNeedAuth: Boolean = true
   private val prefix_register_key="register"
   private def generatorKey(str:String)=prefix_register_key+"_"+str
   val authProvider:Authorization=FlashBirdConfig.getAuthProvider()
   post("/login",false){account:Account=>
-    login(account.phone,account.password)
+    login((account.phone),(account.password))
   }
   private def login(phone:String,password:String)={
-    val sql=s"select id,phone,icon,sex,nick,age,area,job from tb_user where phone='${phone}' and password='${Tools.md5(password)}'"
+    val sql=s"select id,phone,icon,sex,nick,age,area,job from tb_user where phone='${SqlProvider.checkUnSafeWord(phone)}' and password='${Tools.md5(password)}'"
     try {
       val list=SqlProvider.noTransactionExec[Map[String, AnyRef]](sql)
       if(list!=null&&list.size>0){
@@ -55,12 +56,12 @@ class AccountService extends Controller(Some("/account")){
    * phone number
    */
   post("/register/step1",false){phone:String=>
-    sendSMSVerifyCode(phone)
+    sendSMSVerifyCode(SqlProvider.checkUnSafeWord(phone))
   }
   private def sendSMSVerifyCode(phone:String)={
-    val verifyCode=SMSUtil.generatorVerifyCode
+    val verifyCode=SMSUtil.generatorRandomNumber(6)
     val timeOut=2
-    val msg=s"【长虹安康】你的验证码是${verifyCode},请在${timeOut}分钟内使用,否则将失效"
+    val msg=s"${verifyCode}为你本次验证码,10分钟内有效!"
     if(SMSUtil(msg,phone)){
       RedisProvider.redisCommand{client=>
         val key=generatorKey(phone)
@@ -120,7 +121,7 @@ class AccountService extends Controller(Some("/account")){
       request.content match {
         case Some(bean)=>{
           if(currentUserId.equals(bean.id)){
-            val updateSql=s"update tb_user set password='${Tools.md5(bean.newPwd)}' where id='${bean.id}' and password='${Tools.md5(bean.oldPwd)}'"
+            val updateSql=s"update tb_user set password='${Tools.md5(bean.newPwd)}' where id='${SqlProvider.checkUnSafeWord(bean.id)}' and password='${Tools.md5(bean.oldPwd)}'"
             SqlProvider.noTransactionExec[Int](updateSql) match{
               case item::list if item>0=>DefaultResponseContent(DefaultResponseCode.succeed._1,"修改密码成功")
             }
@@ -139,7 +140,7 @@ class AccountService extends Controller(Some("/account")){
     RedisProvider.redisCommand { client =>
       val _code = client.get(generatorKey(request.phone))
       if (_code != null && _code.equals(request.verifyCode)) {
-        val updateSql=s"update tb_user set password='${Tools.md5(request.password)}' where phone='${request.phone}'"
+        val updateSql=s"update tb_user set password='${Tools.md5(request.password)}' where phone='${SqlProvider.checkUnSafeWord(request.phone)}'"
         SqlProvider.noTransactionExec[Int](updateSql) match{
           case item::list=>{
             if(item>0){

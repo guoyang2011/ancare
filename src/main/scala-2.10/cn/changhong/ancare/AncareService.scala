@@ -11,7 +11,8 @@ import com.twitter.util.Future
 /**
  * Created by yangguo on 15/10/28.
  */
-class AncareService extends Controller(Some("/my/")) {
+class AncareService extends Controller(Some("/my")) {
+
 
   /**
    * 1.
@@ -33,13 +34,15 @@ class AncareService extends Controller(Some("/my/")) {
       case ex: Throwable => 20
     }
     val currentUserId=request.underlying.headerMap.getOrElse(FlashBirdConfig.key_access_token_info,"-1")
-    if(familyMemberCheck(currentUserId,userId)){
+    if(userId.equals(currentUserId)||familyMemberCheck(currentUserId,userId)){
       val sql = s"select $columns from tb_hsounds where user_id='$userId' order by creation desc limit ${start*max},$max "
       SqlProvider.noTransactionExec[Map[String,AnyRef]](sql)
     }else{
       DefaultResponseContent(DefaultResponseCode.no_right._1,DefaultResponseCode.no_right._2)
     }
   }
+
+  override def defaultIsNeedAuth: Boolean = true
 
   private def familyMemberCheck(currentUserId:String,otherUserId:String):Boolean={
     val sql=s"select count(0) from (select user_id from tb_familymember where family_id in (SELECT DISTINCT family_id from tb_familymember where user_id='${currentUserId}')) as a where a.user_id='${otherUserId}' "

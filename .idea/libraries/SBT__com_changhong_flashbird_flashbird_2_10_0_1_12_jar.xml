@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="SBT: com.changhong.flashbird:flashbird_2.10:0.1.12:jar">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.ivy2/local/com.changhong.flashbird/flashbird_2.10/0.1.12/jars/flashbird_2.10.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/.ivy2/local/com.changhong.flashbird/flashbird_2.10/0.1.12/docs/flashbird_2.10-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.ivy2/local/com.changhong.flashbird/flashbird_2.10/0.1.12/srcs/flashbird_2.10-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

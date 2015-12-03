@@ -17,16 +17,12 @@ import sun.misc.BASE64Encoder
  */
 
 case class SmsResponse(err_msg:String,err_code:Int,state:String)
-class SMSAuthInfo{
-  val apiKey=FlashBirdConfig.getValue("com.changhong.sms.server.appkey", "f73ed6801e2211e5a6f4342387b8b85a")
-  val secretKey=FlashBirdConfig.getValue("com.changhong.sms.server.secretkey","f90ae3f01e2211e5ba08342387b8b85a")
+class SMSAuthInfo(val apiKey:String=FlashBirdConfig.getSMSServerApiKey(),val secretKey:String=FlashBirdConfig.getSMSServerSecretKey()){
   val oauthMethod="HMAC-SHA1"
   val oauthVersion="1.0"
   val host="api.chiq-cloud.com"
   val timestamp=System.currentTimeMillis()
-
   val nonce=Tools.md5(System.nanoTime().toString)
-
   val  secretString=s"oauth_consumer_key=$apiKey&oauth_nonce=$nonce&oauth_signature_method=$oauthMethod&oauth_timestamp=$timestamp&oauth_version=$oauthVersion"
   def generatorOAuthString()={
     val mac=Mac.getInstance("HmacSHA1")
@@ -41,6 +37,13 @@ class SMSAuthInfo{
 object SMSUtil {
   val min=100000
   val max=1000000
+  def generatorRandomNumber(num:Int)={
+    val random=new Random()
+    val max=Math.pow(10, num).toInt
+    val min=Math.pow(10,num-1).toInt
+    val rNum=random.nextInt(max)%(max-min+1)+min
+    rNum.toString
+  }
   def generatorVerifyCode={
     val random=new Random()
     random.nextInt(max)%(max-min+1)+min

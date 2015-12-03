@@ -44,6 +44,9 @@ com.ancare.authorization.key: Authorization
 com.changhong.sms.server.url: 1
 com.changhong.sms.server.appkey: 1
 com.changhong.sms.server.secretkey: 1
-
+#单用户支持最大登陆数
+com.flashbird.framework.max.login.size: 2
+#用户认证实现
+com.flashbird.http.framework.authorization: com.flashbird.http.framework.authorization.DefaultRedisAuthorizationProvider
 
 

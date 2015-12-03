@@ -25,13 +25,13 @@ object AncareTools {
     }
   }
   def insert(kvs:Map[String,String],tableName:String)={
-    val keys=kvs.map(_._1).reduce(_+","+_)
-    val values=kvs.map("'"+_._2+"'").reduce(_+","+_)
+    val keys=kvs.map{kv=>SqlProvider.checkUnSafeWord(kv._1)}.mkString(",")
+    val values=kvs.map(kv=>"'"+SqlProvider.checkUnSafeWord(kv._2)+"'").mkString(",")
     val sql=s"insert into $tableName($keys) values($values)"
     SqlProvider.noTransactionExec[Int](sql)
   }
   def update(kvs:Map[String,String],tableName:String,where:String)={
-    val settingStr=kvs.map(kv=>s"${kv._1}='${kv._2}'").reduce(_+","+_)
+    val settingStr=kvs.map(kv=>s"${SqlProvider.checkUnSafeWord(kv._1)}='${SqlProvider.checkUnSafeWord(kv._2)}'").mkString(",")
     val updateSql=s"update $tableName set $settingStr where $where"
     SqlProvider.noTransactionExec[Int](updateSql)
   }

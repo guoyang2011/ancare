@@ -14,9 +14,10 @@ object Start extends BuilderFlashBirdServer{
   }
 
   override def loadConfig(path: String): Unit = FlashBirdConfig(path)
-
   def main(args: Array[String]) {
     require(args!=null&&args.size>0,"Please Enter Ancare Config File!")
+//    val testpath="/Users/yangguo/hadoop/finatra/finatra/examples/FlashbirdTest/src/main/resources/ancare.yaml"
+//    println(args(0))
     start(args(0))
   }
 }
